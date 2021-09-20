@@ -36,14 +36,9 @@ const App = (props) => {
     console.log(`Importance of note ${id} needs to be toggled`);
     const note = notes.find((n) => n.id === id);
     const changedNote = { ...note, important: !note.important };
-    update(id, changedNote)
-      .then((returnedNote) => {
-        setNotes(notes.map((note) => (note.id !== id ? note : returnedNote)));
-      })
-      .catch((err) => {
-        alert(`The note "${note.content}" was already deleted from server`);
-        setNotes(notes.filter((item) => item.id !== id));
-      });
+    update(id, changedNote).then((returnedNote) => {
+      setNotes(notes.map((note) => (note.id !== id ? note : returnedNote)));
+    });
   };
 
   const notesToShow = showAll ? notes : notes.filter((note) => note.important);
