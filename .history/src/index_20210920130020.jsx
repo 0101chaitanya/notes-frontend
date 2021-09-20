@@ -1,9 +1,6 @@
 import ReactDOM from "react-dom";
 import App from "./App.jsx";
 import "./index.css";
-
-ReactDOM.render(<App />, document.getElementById("root"));
-
 /* const notes = [
   {
     id: 1,
@@ -25,3 +22,4 @@ ReactDOM.render(<App />, document.getElementById("root"));
   },
 ];
  */
+ReactDOM.render(<App />, document.getElementById("root"));

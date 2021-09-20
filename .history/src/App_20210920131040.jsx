@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Note from "./components/Note";
 import Notification from "./components/Notification";
-import Footer from "./components/Footer";
 import { create, update, getAll } from "./services/notes";
 const App = (props) => {
   const [notes, setNotes] = useState([]);
@@ -46,9 +45,6 @@ const App = (props) => {
         setErrorMessage(
           `The note "${note.content}" was already deleted from server`
         );
-        setTimeout(() => {
-          setErrorMessage(null);
-        }, 5000);
         setNotes(notes.filter((item) => item.id !== id));
       });
   };
@@ -76,7 +72,6 @@ const App = (props) => {
         <input onChange={handleNoteChange} value={newNote} />
         <button type="submit">Save</button>
       </form>
-      <Footer />
     </div>
   );
 };
