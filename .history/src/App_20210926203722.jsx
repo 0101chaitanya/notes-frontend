@@ -3,7 +3,7 @@ import Note from "./components/Note";
 import Notification from "./components/Notification";
 import Footer from "./components/Footer";
 import login from "./services/login";
-import { create, update, getAll, setToken } from "./services/notes";
+import { create, update, getAll } from "./services/notes";
 import LoginForm from "./components/loginForm";
 const App = (props) => {
   const [notes, setNotes] = useState([]);
@@ -12,19 +12,14 @@ const App = (props) => {
   const [errorMessage, setErrorMessage] = useState("");
    const [username, setUsername] = useState("");
    const [password, setPassword] = useState(""); 
-   const [user, setUser] = useState(null);
+   const [user, setUser] = useState("");
   useEffect(() => {
-   
-   if(user){
-
-     console.log("Effect:");
-     getAll().then((initialNotes) => {
-       console.log("Promise fulfilled");
-       setNotes(initialNotes);
-      });
-    }
-    }, [user]);
-    
+    console.log("Effect:");
+    getAll().then((initialNotes) => {
+      console.log("Promise fulfilled");
+      setNotes(initialNotes);
+    });
+  }, []);
   console.log("render", notes.length, "notes");
 
   const addNote = (e) => {
@@ -40,7 +35,6 @@ const App = (props) => {
       setNewNote("");
     });
   };
-  
   const handleNoteChange = (e) => {
     setNewNote(e.target.value);
   };
@@ -49,14 +43,11 @@ const App = (props) => {
   // console.log("logging in with", username, password);
  
 try {
-const data = await login({
+const user = await login({
   username, password,
 })
-console.log(data)
- //setUser(data.user);
- window.localStorage.setItem('currentUser', JSON.stringify(data));
- setToken((data.token));
- console.log("token",data.token)
+console.log("user",user)
+ setUser(user);
  setUsername("");
  setPassword("");
 }catch(err) {
@@ -66,15 +57,6 @@ console.log(data)
   }, 5000);
 }
 };
-
-useEffect(() => {
-  const loggedUserJSON = window.localStorage.getItem("currentUser");
-  if (loggedUserJSON) {
-    const data = JSON.parse(loggedUserJSON);
-    setUser(data.user);
-    setToken(data.token);
-  }
-},[] );
   const toggleImportanceOf = (id) => {
     const note = notes.find((n) => n.id === id);
     const changedNote = { ...note, important: !note.important };
@@ -98,18 +80,11 @@ useEffect(() => {
   return (
     <div>
       <h1>Notes</h1>
-      <h3>Current User:{user && user.username}</h3>
+      <h3>Current User:{user.username}</h3>
       {errorMessage && <Notification message={errorMessage} />}
-{
-user  === null &&
-      <LoginForm
-        handleLogin={handleLogin}
-        setPassword={setPassword}
-        setUsername={setUsername}
-        username={username}
-        password={password}
-      />
-}
+
+      <LoginForm props= {  handleLogin ,setPassword, setUsername, username, password,
+} />
       <div>
         <button onClick={() => setShowAll(!showAll)}>
           show {showAll ? "important" : "all"}
@@ -124,13 +99,10 @@ user  === null &&
           />
         ))}
       </ul>
-    {
-  user  !== null &&
-      (<form onSubmit={addNote}>
+      <form onSubmit={addNote}>
         <input onChange={handleNoteChange} value={newNote} />
         <button type="submit">Save</button>
-      </form>)
-    }
+      </form>
       <Footer />
     </div>
   );

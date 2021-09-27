@@ -67,14 +67,15 @@ console.log(data)
 }
 };
 
+const storage = () => localStorage.getItem("currentUser");
 useEffect(() => {
   const loggedUserJSON = window.localStorage.getItem("currentUser");
   if (loggedUserJSON) {
-    const data = JSON.parse(loggedUserJSON);
-    setUser(data.user);
-    setToken(data.token);
+    const user = JSON.parse(loggedUserJSON);
+    setUser(user);
+    setToken(user.token);
   }
-},[] );
+},[storage] );
   const toggleImportanceOf = (id) => {
     const note = notes.find((n) => n.id === id);
     const changedNote = { ...note, important: !note.important };

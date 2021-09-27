@@ -19,7 +19,7 @@ const getAll = async() => {
   console.log(config);
   const request = await axios.get(baseUrl, config);
   console.log(request);
-  return await request.data;
+  return await request.res.data;
 };
 
 const create = async(newObject) => {
@@ -33,15 +33,9 @@ const create = async(newObject) => {
   return await request.data;
 };
 
-const update = async (id, newObject) => {
-    const config = {
-      headers: {
-        Authorization: token,
-      },
-    };
-
-  const request = await axios.put(`${baseUrl}/${id}`, newObject ,config);
-  return request.data;
+const update = (id, newObject) => {
+  const request = axios.put(`${baseUrl}/${id}`, newObject);
+  return request.then((res) => res.data);
 };
 
 export { getAll, create, update ,setToken };

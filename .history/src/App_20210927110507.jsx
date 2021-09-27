@@ -24,7 +24,6 @@ const App = (props) => {
       });
     }
     }, [user]);
-    
   console.log("render", notes.length, "notes");
 
   const addNote = (e) => {
@@ -40,7 +39,6 @@ const App = (props) => {
       setNewNote("");
     });
   };
-  
   const handleNoteChange = (e) => {
     setNewNote(e.target.value);
   };
@@ -66,15 +64,6 @@ console.log(data)
   }, 5000);
 }
 };
-
-useEffect(() => {
-  const loggedUserJSON = window.localStorage.getItem("currentUser");
-  if (loggedUserJSON) {
-    const data = JSON.parse(loggedUserJSON);
-    setUser(data.user);
-    setToken(data.token);
-  }
-},[] );
   const toggleImportanceOf = (id) => {
     const note = notes.find((n) => n.id === id);
     const changedNote = { ...note, important: !note.important };

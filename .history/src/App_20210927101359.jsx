@@ -12,10 +12,10 @@ const App = (props) => {
   const [errorMessage, setErrorMessage] = useState("");
    const [username, setUsername] = useState("");
    const [password, setPassword] = useState(""); 
-   const [user, setUser] = useState(null);
+   const [auth, setAuth] = useState(null);
   useEffect(() => {
    
-   if(user){
+   if(auth){
 
      console.log("Effect:");
      getAll().then((initialNotes) => {
@@ -23,8 +23,7 @@ const App = (props) => {
        setNotes(initialNotes);
       });
     }
-    }, [user]);
-    
+    }, [auth]);
   console.log("render", notes.length, "notes");
 
   const addNote = (e) => {
@@ -40,7 +39,6 @@ const App = (props) => {
       setNewNote("");
     });
   };
-  
   const handleNoteChange = (e) => {
     setNewNote(e.target.value);
   };
@@ -49,14 +47,13 @@ const App = (props) => {
   // console.log("logging in with", username, password);
  
 try {
-const data = await login({
+const loginData = await login({
   username, password,
 })
-console.log(data)
- //setUser(data.user);
- window.localStorage.setItem('currentUser', JSON.stringify(data));
- setToken((data.token));
- console.log("token",data.token)
+console.info("user",login.user.username)
+ setAuth(loginData);
+ setToken(loginData.token);
+ console.info("token",loginData.token)
  setUsername("");
  setPassword("");
 }catch(err) {
@@ -66,15 +63,6 @@ console.log(data)
   }, 5000);
 }
 };
-
-useEffect(() => {
-  const loggedUserJSON = window.localStorage.getItem("currentUser");
-  if (loggedUserJSON) {
-    const data = JSON.parse(loggedUserJSON);
-    setUser(data.user);
-    setToken(data.token);
-  }
-},[] );
   const toggleImportanceOf = (id) => {
     const note = notes.find((n) => n.id === id);
     const changedNote = { ...note, important: !note.important };
@@ -98,10 +86,10 @@ useEffect(() => {
   return (
     <div>
       <h1>Notes</h1>
-      <h3>Current User:{user && user.username}</h3>
+      <h3>Current User:{auth && auth.user.username}</h3>
       {errorMessage && <Notification message={errorMessage} />}
 {
-user  === null &&
+auth  === null &&
       <LoginForm
         handleLogin={handleLogin}
         setPassword={setPassword}
@@ -125,7 +113,7 @@ user  === null &&
         ))}
       </ul>
     {
-  user  !== null &&
+  auth  !== null &&
       (<form onSubmit={addNote}>
         <input onChange={handleNoteChange} value={newNote} />
         <button type="submit">Save</button>

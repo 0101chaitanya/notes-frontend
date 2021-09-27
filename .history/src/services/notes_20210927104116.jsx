@@ -18,30 +18,28 @@ const getAll = async() => {
   };
   console.log(config);
   const request = await axios.get(baseUrl, config);
-  console.log(request);
-  return await request.data;
+  const nonExisting = {
+    id: 10000,
+    content: "This note is not saved to server",
+    date: "2019-05-30T17:30:31.098Z",
+    important: true,
+  };
+  return request.then((res) => res.data.concat(nonExisting));
 };
 
-const create = async(newObject) => {
+const create = (newObject) => {
   const config = {
     headers: {
       Authorization: token
     } 
   }
-  const request = await axios.post(baseUrl, newObject , config);
-  console.log(request);
-  return await request.data;
+  const request = axios.post(baseUrl, newObject , config);
+  return request.then((res) => res.data);
 };
 
-const update = async (id, newObject) => {
-    const config = {
-      headers: {
-        Authorization: token,
-      },
-    };
-
-  const request = await axios.put(`${baseUrl}/${id}`, newObject ,config);
-  return request.data;
+const update = (id, newObject) => {
+  const request = axios.put(`${baseUrl}/${id}`, newObject);
+  return request.then((res) => res.data);
 };
 
 export { getAll, create, update ,setToken };

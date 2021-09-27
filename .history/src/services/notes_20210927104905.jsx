@@ -40,8 +40,8 @@ const update = async (id, newObject) => {
       },
     };
 
-  const request = await axios.put(`${baseUrl}/${id}`, newObject ,config);
-  return request.data;
+  const request = axios.put(`${baseUrl}/${id}`, newObject ,config);
+  return request.then((res) => res.data);
 };
 
 export { getAll, create, update ,setToken };

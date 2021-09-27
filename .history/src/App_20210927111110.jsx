@@ -70,9 +70,9 @@ console.log(data)
 useEffect(() => {
   const loggedUserJSON = window.localStorage.getItem("currentUser");
   if (loggedUserJSON) {
-    const data = JSON.parse(loggedUserJSON);
-    setUser(data.user);
-    setToken(data.token);
+    const user = JSON.parse(loggedUserJSON);
+    setUser(user);
+    setToken(user.token);
   }
 },[] );
   const toggleImportanceOf = (id) => {
