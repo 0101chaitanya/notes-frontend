@@ -1,4 +1,4 @@
-import React, { useState, useEffect , useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Note from "./components/Note";
 import Notification from "./components/Notification";
 import Footer from "./components/Footer";
@@ -28,16 +28,12 @@ const App = (props) => {
     }
   }, [user]);
 
-  console.log("User:", user);
   const addNote = (e) => {
     e.preventDefault();
-     noteFormRef.current.toggleVisibility();
-
     const noteObject = {
       content: newNote,
       date: new Date().toISOString(),
       important: Math.random() < 0.5,
-      user: user.id
     };
 
     create(noteObject).then((returnedNotes) => {
@@ -99,7 +95,8 @@ const App = (props) => {
 
   const notesToShow = showAll ? notes : notes.filter((note) => note.important);
 
-  const noteFormRef = useRef();
+
+
   const loginForm = () => (
     <Togglable buttonLabel="log in">
       <LoginForm
@@ -113,12 +110,12 @@ const App = (props) => {
   );
 
   const noteForm = () => (
-    <Togglable buttonLabel="new note" ref={noteFormRef}>
+    <Togglable buttonLabel="new note">
       <NoteForm
-        addNote={addNote}
-        handleNoteChange={handleNoteChange}
-        newNote={newNote}
-      />
+          addNote={addNote}
+          handleNoteChange={handleNoteChange}
+          newNote={newNote}
+        />
     </Togglable>
   );
   return (
@@ -126,13 +123,14 @@ const App = (props) => {
       <h1>Notes</h1>
       <h3>Current User:{user && user.username}</h3>
       {errorMessage && <Notification message={errorMessage} />}
-       {user === null ?
-        loginForm() :
+      {user === null ? (
+        loginForm()
+      ) : (
         <div>
           <p>{user.name} logged in</p>
           {noteForm()}
         </div>
-      }
+      )}
 
       <div>
         <button onClick={() => setShowAll(!showAll)}>

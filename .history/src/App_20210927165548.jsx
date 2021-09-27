@@ -28,16 +28,12 @@ const App = (props) => {
     }
   }, [user]);
 
-  console.log("User:", user);
   const addNote = (e) => {
     e.preventDefault();
-     noteFormRef.current.toggleVisibility();
-
     const noteObject = {
       content: newNote,
       date: new Date().toISOString(),
       important: Math.random() < 0.5,
-      user: user.id
     };
 
     create(noteObject).then((returnedNotes) => {
@@ -100,6 +96,7 @@ const App = (props) => {
   const notesToShow = showAll ? notes : notes.filter((note) => note.important);
 
   const noteFormRef = useRef();
+  console.log("ref",noteFormRef.current())
   const loginForm = () => (
     <Togglable buttonLabel="log in">
       <LoginForm
@@ -113,12 +110,12 @@ const App = (props) => {
   );
 
   const noteForm = () => (
-    <Togglable buttonLabel="new note" ref={noteFormRef}>
-      <NoteForm
-        addNote={addNote}
-        handleNoteChange={handleNoteChange}
-        newNote={newNote}
-      />
+    <Togglable buttonLabel="new note">
+      <NoteForm ref= {noteFormRef}
+          addNote={addNote}
+          handleNoteChange={handleNoteChange}
+          newNote={newNote}
+        />
     </Togglable>
   );
   return (

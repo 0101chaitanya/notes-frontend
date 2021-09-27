@@ -28,7 +28,6 @@ const App = (props) => {
     }
   }, [user]);
 
-  console.log("User:", user);
   const addNote = (e) => {
     e.preventDefault();
      noteFormRef.current.toggleVisibility();

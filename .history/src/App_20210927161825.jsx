@@ -1,4 +1,4 @@
-import React, { useState, useEffect , useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Note from "./components/Note";
 import Notification from "./components/Notification";
 import Footer from "./components/Footer";
@@ -28,16 +28,12 @@ const App = (props) => {
     }
   }, [user]);
 
-  console.log("User:", user);
   const addNote = (e) => {
     e.preventDefault();
-     noteFormRef.current.toggleVisibility();
-
     const noteObject = {
       content: newNote,
       date: new Date().toISOString(),
       important: Math.random() < 0.5,
-      user: user.id
     };
 
     create(noteObject).then((returnedNotes) => {
@@ -98,42 +94,32 @@ const App = (props) => {
   };
 
   const notesToShow = showAll ? notes : notes.filter((note) => note.important);
+  const hideWhenVisible = { display: loginVisible ? "none" : "" };
+  const showWhenVisible = { display: loginVisible ? "" : "none" };
 
-  const noteFormRef = useRef();
-  const loginForm = () => (
-    <Togglable buttonLabel="log in">
-      <LoginForm
-        handleLogin={handleLogin}
-        setPassword={setPassword}
-        setUsername={setUsername}
-        username={username}
-        password={password}
-      />
-    </Togglable>
-  );
-
-  const noteForm = () => (
-    <Togglable buttonLabel="new note" ref={noteFormRef}>
-      <NoteForm
-        addNote={addNote}
-        handleNoteChange={handleNoteChange}
-        newNote={newNote}
-      />
-    </Togglable>
-  );
   return (
     <div>
       <h1>Notes</h1>
       <h3>Current User:{user && user.username}</h3>
       {errorMessage && <Notification message={errorMessage} />}
-       {user === null ?
-        loginForm() :
+      {user === null && (
         <div>
-          <p>{user.name} logged in</p>
-          {noteForm()}
-        </div>
-      }
+          <div style={hideWhenVisible}>
+            <button onClick={() => setLoginVisible(true)}>log in</button>
+          </div>
 
+          <div style={showWhenVisible}>
+            <LoginForm
+              handleLogin={handleLogin}
+              setPassword={setPassword}
+              setUsername={setUsername}
+              username={username}
+              password={password}
+            />
+            <button onClick={() => setLoginVisible(false)}>cancel</button>
+          </div>
+        </div>
+      )}
       <div>
         <button onClick={() => setShowAll(!showAll)}>
           show {showAll ? "important" : "all"}
@@ -148,6 +134,13 @@ const App = (props) => {
           />
         ))}
       </ul>
+      {user !== null && (
+        <NoteForm
+          addNote={addNote}
+          handleNoteChange={handleNoteChange}
+          newNote={newNote}
+        />
+      )}
       <Footer />
     </div>
   );

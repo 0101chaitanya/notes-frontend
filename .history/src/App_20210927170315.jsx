@@ -28,7 +28,6 @@ const App = (props) => {
     }
   }, [user]);
 
-  console.log("User:", user);
   const addNote = (e) => {
     e.preventDefault();
      noteFormRef.current.toggleVisibility();
@@ -37,7 +36,6 @@ const App = (props) => {
       content: newNote,
       date: new Date().toISOString(),
       important: Math.random() < 0.5,
-      user: user.id
     };
 
     create(noteObject).then((returnedNotes) => {
